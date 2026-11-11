@@ -15,6 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Set up Nushell
+        uses: hustcer/setup-nu@v3
+
+      - name: Set up Just
+        uses: extractions/setup-just@v4
+
       - name: Generate top languages card
         uses: readme-tools/github-readme-stats-action@v2
         with:
@@ -24,9 +30,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit cards
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add profile/*.svg
-          git commit -m "Update README cards" || exit 0
-          git push
+        run: just commit-cards
