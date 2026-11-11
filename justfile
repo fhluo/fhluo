@@ -5,8 +5,18 @@ set default-list := true
 
 [script]
 commit-cards:
-  git config user.name "github-actions[bot]"
-  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+  let changes = (git status --porcelain profile/*.svg)
+
+  if ($changes | is-empty) {
+    print "No README card changes."
+    exit 0
+  }
+
   git add profile/*.svg
-  try { git commit -m "Update README cards" } catch { exit 0 }
+  (
+    git
+    -c user.name="github-actions[bot]"
+    -c user.email="41898282+github-actions[bot]@users.noreply.github.com"
+    commit -m "Update README cards"
+  )
   git push
